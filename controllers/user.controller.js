@@ -82,17 +82,25 @@ async function handlePostUserLogin(req,res){
     // get user and compare password:
    const user = await User.signinUser(email, password);
 
-    // if user: generate token, else: invalid msg   
+    // if user: generate token and set cookies, else: invalid msg   
    if(user){
+
         // create token:
         const token = jwt.sign({
             userid: user._id,
         }, JWT_SECRET);
 
+        // set cookies:
+        res.cookies("token", token, {
+            httpOnly: true, 
+            sameSite: 'strict', 
+            maxAge: 1 * 24 * 60 * 60 * 1000 ,
+        });
+
         return res.status(200).json({
-            message: "User sign in successfully",
+            message: "Signed in successfully",
             success: true,
-        })
+        });
    }
    else return res.status(411).json({
         message: "Invalid credentials",
@@ -103,10 +111,15 @@ async function handlePostUserLogin(req,res){
 
 // [GET] handleGetUserLogout:
 function handleGetUserLogout(req,res){
-    
+
+    // remove cookies:
+    res.cookies("token","", {maxAge: 1});
+
+    return res.status(200).json({
+        message: "Logged out successfully",
+        success: true,
+    });
 }
-
-
 
 
 

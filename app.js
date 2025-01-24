@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
-const express = require("express");
 const cors = require("cors");
+const express = require("express");
+const cookieParser = require("cookie-parser");
 
 const { connectMongo } = require("./db");
 
@@ -19,6 +20,7 @@ connectMongo();
 
 // middlewares:
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json()); // supports the JSON body in posts request
 app.use(express.urlencoded({extended: false}));
 
