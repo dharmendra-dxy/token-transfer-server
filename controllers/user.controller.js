@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const User = require("../models/user.model");
+const Account = require('../models/account.model');
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET=process.env.JWT_SECRET;
@@ -56,6 +57,13 @@ async function handlePostUserSignup(req,res){
     });
     
     const userid = user._id;
+
+    // create Account for the user and initialize money:
+    await Account.create({
+        userId: userid,
+        balance: 1+ Math.random()*10000,
+    });
+
 
     // create token for user using jwt:
     const token = jwt.sign({

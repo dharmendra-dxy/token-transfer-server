@@ -1,13 +1,14 @@
 const express = require("express");
-const router= express.Router();
+const isAuthenticated = require("../middlewares/auth.middleware");
 
+const router= express.Router();
 const {
     handleGetBalance,
     handlePostTransferMoney,
 } = require("../controllers/account.controller");
 
 
-router.get("/balance", handleGetBalance);
-router.get("/transferMoney", handlePostTransferMoney);
+router.get("/balance", isAuthenticated, handleGetBalance);
+router.get("/transferMoney", isAuthenticated, handlePostTransferMoney);
 
 module.exports = router;
