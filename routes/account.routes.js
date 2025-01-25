@@ -9,6 +9,6 @@ const {
 
 
 router.get("/balance", isAuthenticated, handleGetBalance);
-router.get("/transferMoney", isAuthenticated, handlePostTransferMoney);
+router.get("/transfer", isAuthenticated, handlePostTransferMoney);
 
 module.exports = router;
