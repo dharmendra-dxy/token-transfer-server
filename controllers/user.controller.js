@@ -7,6 +7,7 @@ const JWT_SECRET=process.env.JWT_SECRET;
 
 
 // zodSchema:
+
 const signupZodSchema = zod.object({
     username: zod.string(),
     email: zod.string().email(),
@@ -153,6 +154,25 @@ async function handlePutUserEditProfile(req,res){
 
 }
 
+// handleGetUserDetails
+async function handleGetUserDetails(req,res){
+    const filter = req.query.filter || "";
+
+    const users = await User.find({
+        username: {
+            '$regex' : filter,
+        },
+    });
+
+    return res.status(200).json({
+        success: true,
+        user: users.map(user => ({
+            userid: user._id,
+            username: user.username,
+            email: user.email,
+        })),
+    });
+}
 
 
 module.exports = {
@@ -160,5 +180,6 @@ module.exports = {
     handlePostUserSignup,
     handleGetUserLogout,
     handlePutUserEditProfile,
+    handleGetUserDetails,
 }
 

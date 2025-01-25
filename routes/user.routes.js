@@ -7,6 +7,7 @@ const {
     handlePostUserSignup,
     handleGetUserLogout,
     handlePutUserEditProfile,
+    handleGetUserDetails,
 } = require("../controllers/user.controller");
 
 
@@ -15,5 +16,8 @@ router.post("/login", handlePostUserLogin);
 router.get("/signup", handleGetUserLogout);
 
 router.put("/editprofile", isAuthenticated, handlePutUserEditProfile);
+
+router.get("/getuser", handleGetUserDetails);
+
 
 module.exports = router;
