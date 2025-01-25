@@ -12,9 +12,14 @@ const signupZodSchema = zod.object({
     email: zod.string().email(),
     password: zod.string(),
 });
+
 const signinZodSchema = zod.object({
     email: zod.string().email(),
     password: zod.string(),
+});
+
+const updateProfileZodScehma = zod.object({
+    username: zod.string(),
 });
 
 
@@ -91,11 +96,7 @@ async function handlePostUserLogin(req,res){
         }, JWT_SECRET);
 
         // set cookies:
-        res.cookies("token", token, {
-            httpOnly: true, 
-            sameSite: 'strict', 
-            maxAge: 1 * 24 * 60 * 60 * 1000 ,
-        });
+        res.cookie("token", token);
 
         return res.status(200).json({
             message: "Signed in successfully",
@@ -121,11 +122,43 @@ function handleGetUserLogout(req,res){
     });
 }
 
+// [PUT] handlePutUserEditProfile
+async function handlePutUserEditProfile(req,res){
+
+    // check input:
+    const {success} = updateProfileZodScehma.safeParse(req.body);
+    if(!success){
+        return res.status(411).json({
+            message: "Enter relevant information",
+            success: false,
+        });
+    }
+
+    const userid = req.userid;
+    const user = await User.findById(userid);
+    if(!user){
+        return res.status(404).json({
+            message: "User not found",
+            success: false,
+        });
+    }
+
+    user.username = req.body.username;
+    await user.save();
+
+    return res.status(200).json({
+        message: "User updated succesfully",
+        success: true,
+    });
+
+}
+
 
 
 module.exports = {
     handlePostUserLogin,
     handlePostUserSignup,
     handleGetUserLogout,
+    handlePutUserEditProfile,
 }
 

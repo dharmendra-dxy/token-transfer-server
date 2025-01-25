@@ -4,7 +4,7 @@ const router= express.Router();
 const {
     handleGetBalance,
     handlePostTransferMoney,
-} = require("../controllers/account.controllers");
+} = require("../controllers/account.controller");
 
 
 router.get("/balance", handleGetBalance);
