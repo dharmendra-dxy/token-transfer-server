@@ -11,7 +11,7 @@ const accountSchema = new mongoose.Schema({
         type: Number,
         require: true,
     }
-});
+}, {timestamps: true});
 
 // model:
 const Account = mongoose.model('account', accountSchema);
