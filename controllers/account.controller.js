@@ -7,7 +7,7 @@ async function handleGetBalance(req,res){
 
     const userid = req.userid;
 
-    const user = await Account.findOne(userid);
+    const user = await Account.findOne({userId: userid});
     if(user){
         return res.status(200).json({
             message: "Account fetched succesfully",
@@ -30,7 +30,7 @@ async function handlePostTransferMoney(req,res){
 
     // start transaction:
     session.startTransaction();
-    const {amount, receiverId} = req.body();
+    const {amount, receiverId} = req.body;
     
     const senderAccount = await Account.findOne({userId: req.userid}).session(session);
 
@@ -53,8 +53,8 @@ async function handlePostTransferMoney(req,res){
     }
 
     // perform transactions:
-    await Account.updateOne({userid: req.userid}, {$inc: {balance: -amount}}).session(session);
-    await Account.updateOne({userid: receiverId}, {$inc: {balance: amount}}).session(session);
+    await Account.updateOne({userId: req.userid}, {$inc: {balance: -amount}}).session(session);
+    await Account.updateOne({userId: receiverId}, {$inc: {balance: amount}}).session(session);
 
     // commit the transaction:
     await session.commitTransaction();
