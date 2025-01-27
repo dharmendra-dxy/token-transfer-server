@@ -70,10 +70,11 @@ async function handlePostUserSignup(req,res){
         userid,
     }, JWT_SECRET);
 
+    // send token to user and set using frontend in local storage:
     return res.status(200).json({
         message: "User created succesfully",
-        token: token,
         success: true,
+        token: token,
     });
 
     
@@ -104,12 +105,10 @@ async function handlePostUserLogin(req,res){
             userid: user._id,
         }, JWT_SECRET);
 
-        // set cookies:
-        res.cookie("token", token);
-
         return res.status(200).json({
             message: "Signed in successfully",
             success: true,
+            token: token,
         });
    }
    else return res.status(411).json({
