@@ -13,7 +13,7 @@ const {
 
 router.post("/signup", handlePostUserSignup);
 router.post("/login", handlePostUserLogin);
-router.get("/signup", handleGetUserLogout);
+router.get("/logout", handleGetUserLogout);
 
 router.put("/editprofile", isAuthenticated, handlePutUserEditProfile);
 

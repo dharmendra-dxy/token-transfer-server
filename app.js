@@ -19,11 +19,15 @@ connectMongo();
 
 
 // middlewares:
-app.use(cors());
 app.use(cookieParser());
 app.use(express.json()); // supports the JSON body in posts request
 app.use(express.urlencoded({extended: false}));
 
+const corsOption = {
+    origin: "http://localhost:5173",
+    credentials: true,
+}
+app.use(cors(corsOption));
 
 // routes:
 app.use("/api/v1/user", userRoutes);

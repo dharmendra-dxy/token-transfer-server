@@ -8,7 +8,6 @@ const JWT_SECRET=process.env.JWT_SECRET;
 
 
 // zodSchema:
-
 const signupZodSchema = zod.object({
     username: zod.string(),
     email: zod.string().email(),
@@ -71,10 +70,22 @@ async function handlePostUserSignup(req,res){
     }, JWT_SECRET);
 
     // send token to user and set using frontend in local storage:
+    // return res.status(200).json({
+    //     message: "User created succesfully",
+    //     success: true,
+    //     token: token,
+    // });
+
+    // set token in cookies:
+    res.cookie('token', token, { 
+        httpOnly: true, 
+        sameSite: 'strict', 
+        maxAge: 1 * 24 * 60 * 60 * 1000 
+    });
+
     return res.status(200).json({
         message: "User created succesfully",
         success: true,
-        token: token,
     });
 
     
@@ -105,10 +116,17 @@ async function handlePostUserLogin(req,res){
             userid: user._id,
         }, JWT_SECRET);
 
+        
+        // set token cokkie:
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            sameSite: 'strict', 
+            maxAge: 1 * 24 * 60 * 60 * 1000 
+        });
+
         return res.status(200).json({
             message: "Signed in successfully",
             success: true,
-            token: token,
         });
    }
    else return res.status(411).json({
